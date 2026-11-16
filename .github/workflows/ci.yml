@@ -1,0 +1,27 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.0"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: uv sync --group dev
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy src/domain_adaptive_retrieval
+      - run: uv run pytest -m 'not gpu and not network and not slow' --cov=domain_adaptive_retrieval --cov-report=term-missing --cov-fail-under=85
+      - run: uv run dar smoke --offline --config configs/experiments/smoke.yaml
+      - run: uv run python scripts/validate_notebooks.py
+      - run: uv build
+      - run: uv run twine check dist/*
