@@ -1,0 +1,7 @@
+* text=auto
+*.ipynb text eol=lf
+*.md text eol=lf
+*.zip binary
+*.parquet binary
+*.safetensors binary
+PLAN.md export-ignore
