@@ -1,0 +1,12 @@
+{"query_id": "code_q0", "doc_id": "code_0_0", "split": "train", "score": 1}
+{"query_id": "code_q0", "doc_id": "code_0_1", "split": "train", "score": 0}
+{"query_id": "code_q0", "doc_id": "code_0_2", "split": "train", "score": 0}
+{"query_id": "code_q0", "doc_id": "code_0_3", "split": "train", "score": 0}
+{"query_id": "code_q1", "doc_id": "code_1_0", "split": "val", "score": 1}
+{"query_id": "code_q1", "doc_id": "code_1_1", "split": "val", "score": 0}
+{"query_id": "code_q1", "doc_id": "code_1_2", "split": "val", "score": 0}
+{"query_id": "code_q1", "doc_id": "code_1_3", "split": "val", "score": 0}
+{"query_id": "code_q2", "doc_id": "code_2_0", "split": "test", "score": 1}
+{"query_id": "code_q2", "doc_id": "code_2_1", "split": "test", "score": 0}
+{"query_id": "code_q2", "doc_id": "code_2_2", "split": "test", "score": 0}
+{"query_id": "code_q2", "doc_id": "code_2_3", "split": "test", "score": 0}

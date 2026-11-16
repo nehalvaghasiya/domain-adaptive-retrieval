@@ -1,0 +1,12 @@
+{"query_id": "ecommerce_q0", "doc_id": "ecommerce_0_0", "split": "train", "score": 3}
+{"query_id": "ecommerce_q0", "doc_id": "ecommerce_0_1", "split": "train", "score": 2}
+{"query_id": "ecommerce_q0", "doc_id": "ecommerce_0_2", "split": "train", "score": 0}
+{"query_id": "ecommerce_q0", "doc_id": "ecommerce_0_3", "split": "train", "score": 0}
+{"query_id": "ecommerce_q1", "doc_id": "ecommerce_1_0", "split": "val", "score": 3}
+{"query_id": "ecommerce_q1", "doc_id": "ecommerce_1_1", "split": "val", "score": 2}
+{"query_id": "ecommerce_q1", "doc_id": "ecommerce_1_2", "split": "val", "score": 0}
+{"query_id": "ecommerce_q1", "doc_id": "ecommerce_1_3", "split": "val", "score": 0}
+{"query_id": "ecommerce_q2", "doc_id": "ecommerce_2_0", "split": "test", "score": 3}
+{"query_id": "ecommerce_q2", "doc_id": "ecommerce_2_1", "split": "test", "score": 2}
+{"query_id": "ecommerce_q2", "doc_id": "ecommerce_2_2", "split": "test", "score": 0}
+{"query_id": "ecommerce_q2", "doc_id": "ecommerce_2_3", "split": "test", "score": 0}
