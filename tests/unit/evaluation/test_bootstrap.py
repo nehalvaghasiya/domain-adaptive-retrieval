@@ -1,6 +1,7 @@
 """Paired bootstrap keeps query alignments and is seed reproducible."""
 
 import pytest
+
 from domain_adaptive_retrieval.evaluation.bootstrap import paired_bootstrap
 
 

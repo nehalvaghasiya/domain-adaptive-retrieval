@@ -3,8 +3,9 @@
 import json
 from pathlib import Path
 
-from domain_adaptive_retrieval.cli import app
 from typer.testing import CliRunner
+
+from domain_adaptive_retrieval.cli import app
 
 RUNNER = CliRunner()
 

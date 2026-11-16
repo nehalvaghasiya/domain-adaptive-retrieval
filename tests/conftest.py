@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.data.adapters.custom import load_custom
 from domain_adaptive_retrieval.data.bundle import RetrievalBundle
 

@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.config.schema import ExperimentConfig
 from domain_adaptive_retrieval.training.resume import verified_resume_checkpoint
 

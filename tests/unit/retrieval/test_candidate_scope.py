@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.retrieval.candidates import (
     candidate_fingerprint,
     load_candidates,

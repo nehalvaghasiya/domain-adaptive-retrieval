@@ -1,6 +1,7 @@
 """Evidence offsets and legal source grouping regressions."""
 
 import pytest
+
 from domain_adaptive_retrieval.data.bundle import RetrievalBundle
 from domain_adaptive_retrieval.data.chunks import chunk_words
 from domain_adaptive_retrieval.data.splits import grouped_splits

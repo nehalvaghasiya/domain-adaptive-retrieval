@@ -3,11 +3,12 @@
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
+
 from domain_adaptive_retrieval.cli import app
 from domain_adaptive_retrieval.data.adapters.custom import load_custom
 from domain_adaptive_retrieval.workflows._smoke_embedder import HashingEmbedder
 from domain_adaptive_retrieval.workflows._smoke_reranker import LexicalReranker
-from typer.testing import CliRunner
 
 runner = CliRunner()
 

@@ -5,6 +5,7 @@ import types
 from pathlib import Path
 
 import pandas as pd
+
 from domain_adaptive_retrieval.data.adapters.esci import load_esci
 from domain_adaptive_retrieval.data.validation import validate_bundle
 

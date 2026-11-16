@@ -5,6 +5,7 @@ import types
 
 import pytest
 import torch
+
 from domain_adaptive_retrieval.models.device import verify_model_device
 from domain_adaptive_retrieval.models.embedder import EmbeddingModel
 from domain_adaptive_retrieval.models.reranker import RerankerModel
@@ -50,3 +51,12 @@ def test_reranker_wrapper_cpu(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_model_location_mismatch_raises() -> None:
     with pytest.raises(RuntimeError, match="expected cuda"):
         verify_model_device(FakeEmbedding("fake", "cpu"), "cuda:0")
+
+
+@pytest.mark.parametrize("wrapper", [EmbeddingModel, RerankerModel])
+def test_missing_model_library_explains_install(
+    monkeypatch: pytest.MonkeyPatch, wrapper
+) -> None:
+    monkeypatch.setitem(sys.modules, "sentence_transformers", None)
+    with pytest.raises(RuntimeError, match="uv sync --extra train"):
+        wrapper("fake", device="cpu")

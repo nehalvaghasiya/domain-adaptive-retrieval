@@ -1,6 +1,7 @@
 """Lexical retrieval basic properties and stable ties."""
 
 import pytest
+
 from domain_adaptive_retrieval.retrieval.bm25 import BM25Retriever, tokenize
 
 

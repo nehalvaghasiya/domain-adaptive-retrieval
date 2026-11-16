@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.data.adapters.beir import load_beir
 from domain_adaptive_retrieval.data.validation import validate_bundle
 

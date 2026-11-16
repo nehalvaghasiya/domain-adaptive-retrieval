@@ -13,6 +13,7 @@ from typing import Any
 import numpy as np
 import pytest
 import torch
+
 from domain_adaptive_retrieval.config.schema import ExperimentConfig
 from domain_adaptive_retrieval.data.adapters.custom import load_custom
 from domain_adaptive_retrieval.training.embedder import EmbeddingTrainer

@@ -3,6 +3,7 @@
 import numpy as np
 import pytest
 import torch
+
 from domain_adaptive_retrieval.retrieval.cuda_topk import chunked_topk
 
 

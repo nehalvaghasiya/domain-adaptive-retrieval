@@ -2,6 +2,7 @@
 
 import pytest
 import torch
+
 from domain_adaptive_retrieval.models.device import check_device
 
 

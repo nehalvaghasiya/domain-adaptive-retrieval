@@ -1,6 +1,7 @@
 """No test labels, positives or out-of-scope docs in hard-negative sampling."""
 
 import pytest
+
 from domain_adaptive_retrieval.data.bundle import RetrievalBundle
 from domain_adaptive_retrieval.mining.bm25_miner import mine_training_negatives
 from domain_adaptive_retrieval.mining.exclusions import negative_ids

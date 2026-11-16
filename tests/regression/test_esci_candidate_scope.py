@@ -1,6 +1,7 @@
 """No ESCI corpus-wide recall; exact-label semantics and candidate enforcement."""
 
 import pytest
+
 from domain_adaptive_retrieval.data.bundle import RetrievalBundle
 from domain_adaptive_retrieval.evaluation.ecommerce import esci_metrics
 from domain_adaptive_retrieval.evaluation.evaluator import evaluate_predictions

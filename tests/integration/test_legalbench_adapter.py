@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.data.adapters.legalbench import (
     LEGAL_SOURCES,
     load_legalbench,

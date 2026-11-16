@@ -61,6 +61,7 @@ def test_codesearchnet_candidates_use_declared_split_not_gold(monkeypatch) -> No
 
 def test_codesearchnet_missing_split_membership_fails(monkeypatch) -> None:
     import pytest
+
     from domain_adaptive_retrieval.data.validation import DatasetIntegrityError
     from domain_adaptive_retrieval.retrieval.candidates import allowed_ids
 

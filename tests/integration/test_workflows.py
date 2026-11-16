@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.config.schema import ExperimentConfig
 from domain_adaptive_retrieval.data.adapters.custom import load_custom
 from domain_adaptive_retrieval.workflows._smoke_embedder import HashingEmbedder

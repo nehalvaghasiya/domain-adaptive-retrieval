@@ -5,6 +5,7 @@ import types
 from pathlib import Path
 
 import pytest
+
 from domain_adaptive_retrieval.models.checkpoint import fingerprint_path, model_size_mb
 from domain_adaptive_retrieval.reporting.profiler import package_versions, time_call
 from domain_adaptive_retrieval.reporting.publish import publish_checkpoint
@@ -22,6 +23,30 @@ def test_checkpoint_hash_stable(tmp_path: Path) -> None:
 def test_checkpoint_missing(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         fingerprint_path(tmp_path / "missing")
+
+
+def test_checkpoint_hash_independent_of_location_and_file_creation_order(
+    tmp_path: Path,
+) -> None:
+    left, right = tmp_path / "left", tmp_path / "right"
+    left.mkdir()
+    right.mkdir()
+    for name in ("a", "b"):
+        (left / name).write_bytes(name.encode())
+    for name in ("b", "a"):
+        (right / name).write_bytes(name.encode())
+    assert fingerprint_path(left) == fingerprint_path(right)
+    (right / "b").rename(right / "c")
+    assert fingerprint_path(left) != fingerprint_path(right)
+
+
+def test_single_file_checkpoint_size_and_content_changes(tmp_path: Path) -> None:
+    checkpoint = tmp_path / "weights.bin"
+    checkpoint.write_bytes(b"a" * 1024)
+    first = fingerprint_path(checkpoint)
+    assert model_size_mb(checkpoint) == 1 / 1024
+    checkpoint.write_bytes(b"b" * 1024)
+    assert fingerprint_path(checkpoint) != first
 
 
 def test_environment_versions() -> None:

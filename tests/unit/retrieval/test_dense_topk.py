@@ -2,6 +2,7 @@
 
 import numpy as np
 import pytest
+
 from domain_adaptive_retrieval.retrieval.cuda_topk import chunked_topk
 
 

@@ -3,6 +3,7 @@
 import math
 
 import pytest
+
 from domain_adaptive_retrieval.evaluation.ranking import (
     ap_at_k,
     dcg_at_k,
