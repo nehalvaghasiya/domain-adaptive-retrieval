@@ -1,0 +1,15 @@
+runtime:
+  device: cuda:0
+  precision: fp16
+  require_gpu: true
+training:
+  epochs: 2
+  batch_size: 8
+  accumulation: 4
+  learning_rate: 0.00002
+retrieval:
+  embedding_batch_size: 32
+  reranker_batch_size: 16
+  similarity_query_batch_size: 16
+  similarity_doc_chunk_size: 8192
+  candidate_top_k: 100

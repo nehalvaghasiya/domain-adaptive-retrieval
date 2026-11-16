@@ -1,0 +1,8 @@
+# CPU evaluation/development only; model training can be very slow.
+runtime:
+  device: cpu
+  precision: fp32
+  require_gpu: false
+training:
+  batch_size: 2
+  accumulation: 1
