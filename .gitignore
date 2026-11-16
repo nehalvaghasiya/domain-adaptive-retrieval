@@ -17,7 +17,7 @@ data/raw/
 data/processed/
 data/cache/
 outputs/
-models/
+/models/
 *.safetensors
 *.bin
 *.pt
