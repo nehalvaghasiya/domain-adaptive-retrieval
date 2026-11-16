@@ -1,0 +1,3 @@
+{"query_id": "contract:0", "doc_id": "source_0::c0", "split": "train", "score": 1}
+{"query_id": "privacy:1", "doc_id": "source_1::c0", "split": "val", "score": 1}
+{"query_id": "warranty:2", "doc_id": "source_2::c0", "split": "test", "score": 1}

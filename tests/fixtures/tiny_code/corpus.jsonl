@@ -1,0 +1,12 @@
+{"doc_id": "code_0_0", "text": "def sort_function(value):\n    return value + 0\n\nprocesses sort efficiently"}
+{"doc_id": "code_0_1", "text": "def sort_function(value):\n    return value + 1\n\ndoes something unrelated about sort"}
+{"doc_id": "code_0_2", "text": "def sort_function(value):\n    return value + 2\n\ndoes something unrelated about sort"}
+{"doc_id": "code_0_3", "text": "def sort_function(value):\n    return value + 3\n\ndoes something unrelated about sort"}
+{"doc_id": "code_1_0", "text": "def parse_function(value):\n    return value + 0\n\nprocesses parse efficiently"}
+{"doc_id": "code_1_1", "text": "def parse_function(value):\n    return value + 1\n\ndoes something unrelated about parse"}
+{"doc_id": "code_1_2", "text": "def parse_function(value):\n    return value + 2\n\ndoes something unrelated about parse"}
+{"doc_id": "code_1_3", "text": "def parse_function(value):\n    return value + 3\n\ndoes something unrelated about parse"}
+{"doc_id": "code_2_0", "text": "def test_function(value):\n    return value + 0\n\nprocesses test efficiently"}
+{"doc_id": "code_2_1", "text": "def test_function(value):\n    return value + 1\n\ndoes something unrelated about test"}
+{"doc_id": "code_2_2", "text": "def test_function(value):\n    return value + 2\n\ndoes something unrelated about test"}
+{"doc_id": "code_2_3", "text": "def test_function(value):\n    return value + 3\n\ndoes something unrelated about test"}
