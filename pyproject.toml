@@ -22,7 +22,7 @@ dependencies = ["numpy>=1.26,<3", "pydantic>=2,<3", "PyYAML>=6,<7", "typer>=0.15
 [project.optional-dependencies]
 train = [
   "torch>=2.3,<3", "sentence-transformers>=5.1,<6",
-  "datasets>=3,<6", "accelerate>=1,<2", "transformers>=4.56,<5",
+  "datasets>=3,<6", "accelerate>=1,<2", "transformers>=4.56,<6",
   "huggingface-hub>=0.34,<2",
 ]
 benchmark = ["pandas>=2,<4", "pyarrow>=17", "requests>=2,<3"]
