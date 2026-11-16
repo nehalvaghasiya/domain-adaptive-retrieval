@@ -1,0 +1,7 @@
+domain: custom
+runtime:
+  device: cpu
+  require_gpu: false
+  seed: 42
+retrieval:
+  candidate_top_k: 5

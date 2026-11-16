@@ -1,0 +1,3 @@
+domain: custom
+data:
+  custom_dir: examples/custom_dataset

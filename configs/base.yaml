@@ -1,0 +1,23 @@
+# Base profile is CPU safe for inspection and offline smoke; T4 profile overrides it.
+model:
+  embedding_model: BAAI/bge-small-en-v1.5
+  reranker_model: cross-encoder/ms-marco-MiniLM-L6-v2
+  max_sequence_length: 256
+runtime:
+  device: cpu
+  precision: fp32
+  require_gpu: false
+  seed: 42
+training:
+  epochs: 2
+  batch_size: 8
+  accumulation: 4
+  learning_rate: 0.00002
+  negative_strategy: bm25
+retrieval:
+  candidate_top_k: 100
+  embedding_batch_size: 32
+  reranker_batch_size: 16
+reporting:
+  publish: false
+  hub_private: true
