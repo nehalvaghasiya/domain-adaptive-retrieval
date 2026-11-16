@@ -14,7 +14,6 @@ uv run pytest -m 'not gpu and not network and not slow' -q
 
 The offline smoke uses a redistributable synthetic corpus and needs neither a GPU nor network.
 For training and full benchmark runs, install extras: `uv sync --extra train --extra benchmark --group dev`.
-GPU Colab instructions: [docs/colab.md](docs/colab.md).
 
 ## Domains and protocols
 
@@ -26,7 +25,7 @@ GPU Colab instructions: [docs/colab.md](docs/colab.md).
 | E-commerce | Amazon ESCI (US) | graded nDCG@10, exact MRR@10 | only judged candidates |
 | Code | CodeSearchNet Python | MRR@10, nDCG@10 | declared code pool |
 
-**Status:** training checkpoints and full-domain benchmark scores pending independently executed T4 runs. No cross-domain aggregate leaderboard. See [datasets](docs/datasets.md), [evaluation](docs/evaluation.md), and [architecture](docs/architecture.md).
+**Status:** training checkpoints and full-domain benchmark scores pending independently executed T4 runs. No cross-domain aggregate leaderboard.
 
 ## Experiment matrix
 
@@ -62,9 +61,9 @@ config = load_config(
 # run_benchmark(config, embedding_checkpoint="...", reranker_checkpoint="...")
 ```
 
-## Verification and issue status
+## Verification
 
-Offline checks: **119 passing tests, 88.71% coverage, six synthetic domain dry runs**. GPU training, public-dataset downloads, lint/mypy, dependency resolution and model publication were **not** executed in this environment. Do not treat the synthetic results as real checkpoints or benchmark claims. See [the verification report](VERIFICATION_REPORT.md) and [35-issue status tracker](docs/implementation_status.md).
+Offline checks: **119 passing tests, 88.71% coverage, six synthetic domain dry runs**. GPU training, public-dataset downloads, lint/mypy, dependency resolution and model publication were **not** executed in this environment. Do not treat the synthetic results as real checkpoints or benchmark claims.
 
 ## Developer workflow
 
@@ -76,4 +75,4 @@ Sparse qrels cannot establish every unjudged document is irrelevant. ESCI scores
 
 ## Acknowledgments and license
 
-Base models: [BAAI/bge-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5), [cross-encoder/ms-marco-MiniLM-L6-v2](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2). Dataset credits and constraints in [docs/datasets.md](docs/datasets.md). Original repository code: [MIT](LICENSE); datasets and model weights have their own licenses.
+Base models: [BAAI/bge-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5), [cross-encoder/ms-marco-MiniLM-L6-v2](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2). Original repository code: [MIT](LICENSE); datasets and model weights have their own licenses.
