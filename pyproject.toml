@@ -33,6 +33,7 @@ dev = [
   "pytest>=8,<10", "pytest-cov>=5,<8", "mypy>=1.15,<2",
   "ruff>=0.9,<1", "pre-commit>=4,<5", "types-PyYAML>=6",
   "nbformat>=5,<6", "nbclient>=0.10,<1", "build>=1,<2", "twine>=6,<8",
+  "pandas>=2,<4", "torch>=2.3,<3",
 ]
 
 [project.scripts]
@@ -47,6 +48,8 @@ target-version = "py311"
 exclude = ["PLAN.md", "notebooks", "data", "outputs"]
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "B", "UP", "C4"]
+[tool.ruff.lint.isort]
+known-first-party = ["domain_adaptive_retrieval"]
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["B017"]
 "src/domain_adaptive_retrieval/cli.py" = ["B008"]

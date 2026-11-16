@@ -11,9 +11,9 @@ class ExperimentConfig(BaseModel):
 
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
 
-    domain: Literal[
-        "finance", "biomedical", "legal", "ecommerce", "code", "custom"
-    ] = "finance"
+    domain: Literal["finance", "biomedical", "legal", "ecommerce", "code", "custom"] = (
+        "finance"
+    )
     device: str = "cpu"
     require_gpu: bool = False
     precision: Literal["fp16", "fp32", "bf16"] = "fp32"

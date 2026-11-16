@@ -1,0 +1,10 @@
+name: experiment request
+description: Report a experiment request
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Description
+      description: Include expected and observed behavior and a minimal reproduction
+    validations:
+      required: true

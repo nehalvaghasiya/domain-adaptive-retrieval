@@ -31,9 +31,6 @@ pre-commit:
 smoke:
 	uv run dar smoke --offline --config configs/experiments/smoke.yaml
 
-notebooks:
-	uv run python scripts/validate_notebooks.py
-
 build:
 	uv build
 	uv run twine check dist/*

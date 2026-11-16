@@ -1,0 +1,10 @@
+name: feature request
+description: Report a feature request
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Description
+      description: Include expected and observed behavior and a minimal reproduction
+    validations:
+      required: true
