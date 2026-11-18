@@ -57,9 +57,12 @@ def test_esci_label_and_pool_protocol(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.setattr(pd, "read_parquet", lambda *_args, **_kwargs: examples)
     module = types.ModuleType("pyarrow.parquet")
     module.ParquetFile = FakeParquetFile
-    fake_pa = types.ModuleType("pyarrow")
-    fake_pa.parquet = module
-    monkeypatch.setitem(sys.modules, "pyarrow", fake_pa)
+    try:
+        import pyarrow
+    except ImportError:
+        pyarrow = types.ModuleType("pyarrow")
+        monkeypatch.setitem(sys.modules, "pyarrow", pyarrow)
+    monkeypatch.setattr(pyarrow, "parquet", module, raising=False)
     monkeypatch.setitem(sys.modules, "pyarrow.parquet", module)
     bundle = load_esci(tmp_path, seed=42)
     audit = validate_bundle(bundle)

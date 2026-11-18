@@ -70,6 +70,9 @@ class FakeTrainer:
         self.train_dataset = train_dataset
         self.loss = loss
 
+    def add_callback(self, callback: Any) -> None:
+        pass
+
     def train(self) -> None:
         # A genuine (CPU) gradient update on the fake torch model tests orchestration.
         optimizer = torch.optim.SGD(self.model.model.parameters(), lr=0.01)
@@ -109,6 +112,9 @@ def install_fake_train_libs(monkeypatch: pytest.MonkeyPatch) -> None:
     cross.CrossEncoderTrainingArguments = FakeArguments
     cross_losses = types.ModuleType("sentence_transformers.cross_encoder.losses")
     cross_losses.BinaryCrossEntropyLoss = FakeLoss
+    transformers = types.ModuleType("transformers")
+    transformers.set_seed = torch.manual_seed
+    transformers.TrainerCallback = type("TrainerCallback", (), {})
     for name, module in (
         ("datasets", datasets),
         ("sentence_transformers", st),
@@ -116,6 +122,7 @@ def install_fake_train_libs(monkeypatch: pytest.MonkeyPatch) -> None:
         ("sentence_transformers.training_args", training_args),
         ("sentence_transformers.cross_encoder", cross),
         ("sentence_transformers.cross_encoder.losses", cross_losses),
+        ("transformers", transformers),
     ):
         monkeypatch.setitem(sys.modules, name, module)
 
@@ -146,3 +153,43 @@ def test_reranker_training_checkpoint_cycle(
     assert (checkpoint / "weights.marker").is_file()
     assert (tmp_path / "reranker" / "validation_candidates.json").is_file()
     assert (tmp_path / "reranker" / "training_stats.json").is_file()
+
+
+@pytest.mark.parametrize("trainer_class", [EmbeddingTrainer, RerankerTrainer])
+def test_validation_failure_does_not_repeat_optimizer_steps(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, trainer_class
+) -> None:
+    install_fake_train_libs(monkeypatch)
+    bundle = load_custom("tests/fixtures/tiny_finance")
+    cfg = ExperimentConfig(epochs=1, batch_size=2, accumulation=1, max_val_queries=1)
+    train_calls = []
+    original_train = FakeTrainer.train
+
+    def train_once(self):
+        train_calls.append(True)
+        original_train(self)
+
+    monkeypatch.setattr(FakeTrainer, "train", train_once)
+    module = sys.modules[trainer_class.__module__]
+    original_evaluate = module.evaluate_predictions
+    validations = []
+
+    def fail_second_validation(*args, **kwargs):
+        validations.append(True)
+        if len(validations) == 2:
+            raise RuntimeError("interrupted validation")
+        return original_evaluate(*args, **kwargs)
+
+    monkeypatch.setattr(module, "evaluate_predictions", fail_second_validation)
+    with pytest.raises(RuntimeError, match="interrupted validation"):
+        trainer_class(cfg).train(bundle, tmp_path)
+    checkpoint = trainer_class(cfg).train(bundle, tmp_path)
+    assert (checkpoint / "weights.marker").is_file()
+    assert len(train_calls) == 1
+    assert len(validations) == 3
+    validations_before = len(validations)
+    assert trainer_class(cfg).train(bundle, tmp_path) == checkpoint
+    assert len(validations) == validations_before
+    changed = cfg.model_copy(update={"epochs": 2})
+    with pytest.raises(ValueError, match="configuration|dataset"):
+        trainer_class(changed).train(bundle, tmp_path)

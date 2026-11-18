@@ -10,6 +10,7 @@ from domain_adaptive_retrieval.data.bundle import RetrievalBundle
 from domain_adaptive_retrieval.reporting.artifacts import (
     dataset_fingerprint,
     write_json,
+    write_predictions,
 )
 from domain_adaptive_retrieval.reporting.comparison import make_comparison
 from domain_adaptive_retrieval.reporting.model_card import build_model_card
@@ -26,6 +27,18 @@ def test_dataset_fingerprint_changes_with_data(finance_bundle: RetrievalBundle) 
     before = dataset_fingerprint(finance_bundle)
     finance_bundle.corpus["finance_0_0"] += " changed"
     assert dataset_fingerprint(finance_bundle) != before
+
+
+def test_failed_prediction_export_preserves_previous_file(
+    tmp_path: Path, finance_bundle: RetrievalBundle
+) -> None:
+    target = tmp_path / "predictions.jsonl"
+    target.write_text("previous complete export\n")
+    qid = finance_bundle.split_queries("test")[0]
+    did = next(iter(finance_bundle.corpus))
+    with pytest.raises(ValueError, match="Out of range float"):
+        write_predictions(target, {qid: [(did, float("nan"))]}, finance_bundle)
+    assert target.read_text() == "previous complete export\n"
 
 
 def test_model_card_has_warning_and_truthful_results(

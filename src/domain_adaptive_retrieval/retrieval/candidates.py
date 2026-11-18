@@ -36,9 +36,11 @@ def candidate_fingerprint(predictions: Predictions) -> str:
 
 def save_candidates(path: Path, rankings: Predictions) -> None:
     """Persist immutable candidate IDs, first-stage scores and their fingerprint."""
+    from domain_adaptive_retrieval.reporting.artifacts import write_json
+
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {"fingerprint": candidate_fingerprint(rankings), "rankings": rankings}
-    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    write_json(path, payload)
 
 
 def load_candidates(path: Path) -> Predictions:
