@@ -1,78 +1,102 @@
 # Domain Adaptive Retrieval
 
-**Domain-adaptive embedding and cross-encoder fine-tuning, retrieval, reranking and reproducible benchmarking.**
+**Find relevant passages in legal documents.**
 
-Targets ten model variants (five BGE-small bi-encoders and five MiniLM rerankers) across Finance/FiQA, Biomedical/NFCorpus, LegalBench-RAG, Amazon ESCI and Python CodeSearchNet. Benchmark outputs must come from real held-out evaluations; **no model weights or benchmark improvements are bundled or claimed**.
+A compact English embedding model fine-tuned on LegalBench-RAG to retrieve source passages for retrieval-augmented generation (RAG). The repository covers the complete workflow from document preparation to a packaged checkpoint.
 
-## Quickstart (offline, CPU)
-
-```bash
-uv sync --group dev
-uv run dar smoke --offline --config configs/experiments/smoke.yaml
-uv run pytest -m 'not gpu and not network and not slow' -q
+```mermaid
+flowchart LR
+    D[Legal documents] --> C[Passage chunks]
+    C --> M[Legal embedding model]
+    Q[Question] --> M
+    M --> S[Similarity search]
+    S --> P[Relevant passages]
+    P --> R[RAG context]
 ```
 
-The offline smoke uses a redistributable synthetic corpus and needs neither a GPU nor network.
-For training and full benchmark runs, install extras: `uv sync --extra train --extra benchmark --group dev`.
+## What you can do
 
-## Domains and protocols
+- **Prepare documents:** clean text, create passage chunks and split data by source document.
+- **Fine-tune:** mine hard negatives, train the encoder and select a checkpoint using validation data.
+- **Search:** encode questions and passages, then rank passages by vector similarity.
+- **Evaluate:** save ranked predictions, retrieval metrics and paired bootstrap intervals.
+- **Package:** prepare Hugging Face model cards, inference files and evidence checksums.
 
-| Domain | Dataset | Primary metric | Evaluation scope |
-|---|---|---|---|
-| Finance | BEIR FiQA-2018 | nDCG@10, Recall@100 | full corpus |
-| Biomedical | BEIR NFCorpus | nDCG@10, Recall@100 | full corpus |
-| Legal | LegalBench-RAG | character Recall@5 | per source document |
-| E-commerce | Amazon ESCI (US) | graded nDCG@10, exact MRR@10 | only judged candidates |
-| Code | CodeSearchNet Python | MRR@10, nDCG@10 | declared code pool |
+<!-- BEGIN MODEL LINKS -->
+## Model
 
-**Status:** training checkpoints and full-domain benchmark scores pending independently executed T4 runs. No cross-domain aggregate leaderboard.
+[Hugging Face model card](docs/model-cards/legal-embedding.md) · [Evaluation details](docs/results/legal.md)
+<!-- END MODEL LINKS -->
 
-## Experiment matrix
+| Property | Details |
+|---|---|
+| Input | English legal questions and passages |
+| Embeddings | 384 dimensions, normalized for similarity search |
+| Evaluated passage limit | 256 tokens |
+| Dataset | LegalBench-RAG, with source-document splits |
 
-S0 BM25; S1 base embedding; S2 tuned embedding; S3 S1 + base reranker; S4 S1 + tuned reranker; S5 S2 + base reranker; S6 S2 + tuned reranker. Rerankers must use identical first-stage candidate IDs for paired comparisons. No S2/S5/S6 claims without a tuned embedding checkpoint.
+## Quick start
 
-## CLI
+Use Python 3.11+ and [uv](https://docs.astral.sh/uv/). Install dependencies:
 
 ```bash
-dar config validate --config configs/domains/finance.yaml --profile configs/experiments/t4.yaml
-dar hardware check --device cuda:0
-dar data prepare --domain finance --output data/processed/finance
-dar data audit --domain finance
-dar train embedder --domain finance --profile t4 --output outputs/finance/embedder
-dar train reranker --domain finance --profile t4 --output outputs/finance/reranker
-dar evaluate embedder --domain finance --checkpoint outputs/finance/embedder/model
-dar benchmark run --domain finance --embedder outputs/finance/embedder/model --reranker outputs/finance/reranker/model --output outputs/finance/benchmark
-dar report build --run outputs/finance/benchmark
-# Publication explicitly opt-in; private by default
-dar publish model --run outputs/finance/embedder --repo-id USER/bge-small-fiqa-ft --private --confirm
+uv sync --extra train --extra benchmark --extra report
 ```
 
-Some commands require network access to download datasets/weights and NVIDIA CUDA for T4-profile training. Default CPU unit/integration tests never download either.
-
-## Python API
+The example uses a trained checkpoint at `outputs/legal/embedding/model`. Weights are excluded from Git; [train a checkpoint](#train-and-evaluate) if needed. Run this with `uv run --no-sync python`:
 
 ```python
-from domain_adaptive_retrieval.config.loader import load_config
-from domain_adaptive_retrieval.workflows.benchmark import run_benchmark
+from sentence_transformers import SentenceTransformer
 
-config = load_config(
-    "configs/domains/finance.yaml", profile="configs/experiments/t4.yaml"
-)
-# run_benchmark(config, embedding_checkpoint="...", reranker_checkpoint="...")
+model = SentenceTransformer("outputs/legal/embedding/model", device="cpu")
+model.max_seq_length = 256
+prefix = "Represent this sentence for searching relevant passages: "
+question = "When can either party terminate the agreement?"
+passages = [
+    "Either party may terminate with thirty days' written notice.",
+    "Payment is due within fifteen days of the invoice.",
+]
+query = model.encode([prefix + question], normalize_embeddings=True)
+documents = model.encode(passages, normalize_embeddings=True)
+print(passages[int((query @ documents.T).argmax())])
 ```
 
-## Verification
+## Train and evaluate
 
-Offline checks: **119 passing tests, 88.71% coverage, six synthetic domain dry runs**. GPU training, public-dataset downloads, lint/mypy, dependency resolution and model publication were **not** executed in this environment. Do not treat the synthetic results as real checkpoints or benchmark claims.
+Training downloads the dataset and requires a CUDA GPU. Save a new run separately:
 
-## Developer workflow
+```bash
+uv run --no-sync dar train embedder --domain legal --profile t4 \
+  --output outputs/reproduction
+uv run --no-sync dar evaluate embedder --domain legal --profile t4 \
+  --checkpoint outputs/reproduction/legal/embedding/model \
+  --output outputs/reproduction/legal/embedding/evaluation
+```
 
-`make fmt`, `make check`, `make smoke`, and `make build`; PR checks enforce lint, mypy strict, tests, notebook hygiene and package build. See [CONTRIBUTING.md](CONTRIBUTING.md).
+Use the new checkpoint path in the quickstart. Adjust the [legal configuration](configs/domains/legal.yaml) and [runtime profile](configs/experiments/t4.yaml) for your hardware.
 
-## Research limitations
+Evaluation searches within each source document. Retrieved passages can supply context to an LLM; answer generation and answer quality need separate evaluation.
 
-Sparse qrels cannot establish every unjudged document is irrelevant. ESCI scores are judged-list only; legal scores depend on original character offsets and source-grouped splits; code search removes original docstrings but may still contain semantically duplicated code. Training negatives may be false negatives. Published checkpoints require independent license review; retrieval relevance is not medical, legal or financial advice.
+## Hugging Face assets
 
-## Acknowledgments and license
+Build the featured report and prepare local release packages:
 
-Base models: [BAAI/bge-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5), [cross-encoder/ms-marco-MiniLM-L6-v2](https://huggingface.co/cross-encoder/ms-marco-MiniLM-L6-v2). Original repository code: [MIT](LICENSE); datasets and model weights have their own licenses.
+```bash
+uv run --no-sync dar report suite --input outputs \
+  --featured-model legal/embedding --readme README.md \
+  --package-output dist/huggingface
+```
+
+Packages include weights, model cards, inference examples and evaluation evidence. Assets are prepared locally; uploading is a separate `dar publish model` step.
+
+## Project layout
+
+| Path | Contents |
+|---|---|
+| [`src/domain_adaptive_retrieval/`](src/domain_adaptive_retrieval/) | Data, training, retrieval, evaluation and release tooling |
+| [`configs/`](configs/) | Dataset, training and runtime settings |
+| [`notebooks/`](notebooks/) | Colab workflows |
+| [`tests/`](tests/) | Automated checks |
+| [`docs/workflows.md`](docs/workflows.md) | Usage and reproduction guide |
+
+[Contributing](CONTRIBUTING.md) · [MIT license](LICENSE). Model weights and datasets retain their own license terms.
