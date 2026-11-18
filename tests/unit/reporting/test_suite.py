@@ -8,6 +8,7 @@ from typing import Any
 
 import pytest
 import yaml
+from rich.text import Text
 from typer.testing import CliRunner
 
 from domain_adaptive_retrieval.cli import app
@@ -458,10 +459,11 @@ def test_unavailable_featured_model_does_not_change_docs(
 
 def test_cli_suite_is_discoverable_and_rejects_source_overwrite(tmp_path: Path) -> None:
     runner = CliRunner()
-    assert "--hf-namespace" in runner.invoke(app, ["report", "suite", "--help"]).stdout
-    assert (
-        "--featured-model" in runner.invoke(app, ["report", "suite", "--help"]).stdout
-    )
+    help_result = runner.invoke(app, ["report", "suite", "--help"])
+    assert help_result.exit_code == 0
+    help_text = Text.from_ansi(help_result.stdout).plain
+    assert "--hf-namespace" in help_text
+    assert "--featured-model" in help_text
     root = tmp_path / "outputs"
     root.mkdir()
     result = runner.invoke(
