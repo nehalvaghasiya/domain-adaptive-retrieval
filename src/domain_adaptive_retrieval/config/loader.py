@@ -17,6 +17,7 @@ _SECTION_FIELDS = {
         "warmup_ratio",
         "gradient_checkpointing",
         "resume_checkpoint",
+        "save_steps",
         "max_train_pairs",
         "negative_strategy",
         "negatives_per_positive",

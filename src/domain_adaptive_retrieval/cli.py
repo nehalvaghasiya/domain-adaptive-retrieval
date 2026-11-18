@@ -240,6 +240,40 @@ def report_build(run: Path = typer.Option(..., exists=True)) -> None:
     typer.echo(f"Wrote {target}")
 
 
+@report_app.command("suite")
+def report_suite(
+    input: Path = typer.Option(Path("outputs"), exists=True, file_okay=False),
+    output: Path = Path("docs/results"),
+    cards_output: Path = Path("docs/model-cards"),
+    package_output: Path | None = None,
+    hf_namespace: str = "nehal-vaghasiya",
+    readme: Path | None = typer.Option(None, exists=True, dir_okay=False),
+    featured_model: str = typer.Option(
+        "legal/embedding",
+        help="Model to feature in public reports (domain/model_type).",
+    ),
+) -> None:
+    """Report one featured model and retain all local Hugging Face model cards."""
+    from domain_adaptive_retrieval.reporting.suite import build_suite
+
+    try:
+        runs = build_suite(
+            root=input,
+            output=output,
+            cards_output=cards_output,
+            package_output=package_output,
+            namespace=hf_namespace,
+            readme=readme,
+            featured_model=featured_model,
+        )
+    except (ValueError, OSError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    evaluated = sum(run.status == "evaluated" for run in runs)
+    typer.echo(
+        f"Wrote {output}: {featured_model}; retained {evaluated} Hugging Face model cards"
+    )
+
+
 @publish_app.command("model")
 def publish_model(
     run: Path = typer.Option(...),

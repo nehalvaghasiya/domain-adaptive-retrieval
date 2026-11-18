@@ -48,7 +48,7 @@ tags:
 license: {upstream_license}
 model-index: []
 ---
-# Domain Adaptive Retrieval — {config.domain} {model_type}
+# Domain Adaptive Retrieval - {config.domain} {model_type}
 
 **Parent:** `{parent}`  
 **Type:** `{model_type}`  

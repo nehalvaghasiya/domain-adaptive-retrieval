@@ -33,6 +33,7 @@ class ExperimentConfig(BaseModel):
     warmup_ratio: float = Field(default=0.1, ge=0, le=1)
     gradient_checkpointing: bool = False
     resume_checkpoint: Path | None = None
+    save_steps: int = Field(default=0, ge=0)
     max_train_pairs: int = Field(default=0, ge=0)
     max_val_queries: int = Field(default=100, ge=0)
     max_test_queries: int = Field(default=0, ge=0)
