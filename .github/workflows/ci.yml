@@ -13,7 +13,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           version: "0.10.0"
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
       - run: uv sync --extra report --group dev
