@@ -1,0 +1,53 @@
+{
+  "title": "Domain Adaptive Retrieval",
+  "owner": "nehal-vaghasiya",
+  "status": "draft_not_published",
+  "description": "Five domains, 9 evaluated research checkpoints. Every card includes its baseline, evaluation scope and measured tradeoffs.",
+  "items": [
+    {
+      "repo_id": "nehal-vaghasiya/dar-legal-embedding-v1",
+      "type": "model",
+      "note": "Character Recall@5 0.7680 (base 0.3984; Δ +0.3696). Document-scoped retrieval; custom split grouped by source document."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-biomedical-embedding-v1",
+      "type": "model",
+      "note": "nDCG@10 0.3439 (base 0.3461; Δ -0.0022). Full corpus."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-code-embedding-v1",
+      "type": "model",
+      "note": "MRR@10 0.8634 (base 0.8743; Δ -0.0109). CodeSearchNet Python subset; 500 test queries search 500 test documents."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-ecommerce-embedding-v1",
+      "type": "model",
+      "note": "nDCG@10 0.7836 (base 0.7951; Δ -0.0115). Amazon ESCI US Task 1; only products judged for each query."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-finance-embedding-v1",
+      "type": "model",
+      "note": "nDCG@10 0.3857 (base 0.3995; Δ -0.0138). Full corpus after empty-text filtering."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-biomedical-reranker-v1",
+      "type": "model",
+      "note": "nDCG@10 0.2648 (base 0.3492; Δ -0.0845). Full corpus."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-code-reranker-v1",
+      "type": "model",
+      "note": "MRR@10 0.6692 (base 0.7345; Δ -0.0653). CodeSearchNet Python subset; 500 test queries search 500 test documents."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-ecommerce-reranker-v1",
+      "type": "model",
+      "note": "nDCG@10 0.7828 (base 0.7858; Δ -0.0031). Amazon ESCI US Task 1; only products judged for each query."
+    },
+    {
+      "repo_id": "nehal-vaghasiya/dar-finance-reranker-v1",
+      "type": "model",
+      "note": "nDCG@10 0.0645 (base 0.3754; Δ -0.3109). Full corpus after empty-text filtering."
+    }
+  ]
+}
